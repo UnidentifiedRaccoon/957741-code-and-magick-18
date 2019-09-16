@@ -190,29 +190,19 @@
 
   //Функции
   var getFireballSpeed = function(left) {
-    var fireballSpeed = 2;
-    if (left === true) {
-      fireballSpeed = 5;
-      return fireballSpeed;
-    };
-    return fireballSpeed;
+    return left ? 5 : 2;
   };
 
   var getWizardHeight = function (wizardWidth) {
-    var wizardHeight = wizardWidth * 1.337;
-    return wizardHeight;
+    return wizardWidth * 1.337;
   };
 
   function getWizardX (width) {
-    var wizardAppearanceWidth = width/2-wizardWidth/2;
-    console.log(wizardAppearanceWidth);
-    return wizardAppearanceWidth;
+    return width/2-wizardWidth/2;
   };
 
   function getWizardY (height) {
-    var wizardAppearanceHeight = height/3;
-    console.log(wizardAppearanceHeight);
-    return wizardAppearanceHeight;
+    return height/3;
   };
 </script>
 <script src="js/game.js"></script>
