@@ -14,7 +14,7 @@ function renderStatistics(ctx, names, times) {
   ctx.fillText('Ура вы победили!', 120, 40);
   ctx.fillText('Список результатов:', 120, 60);
   var maxTime = 0;
-  // Цикл находяший индекс высоты на основынии данных массива times
+  // Цикл находящий индекс высоты на основании данных массива times
   for (var i = 0; i < times.length; i++) {
     var currentTime = Math.round(times[i]);
     if (currentTime > maxTime) {
