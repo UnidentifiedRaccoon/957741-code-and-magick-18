@@ -14,7 +14,7 @@ function renderStatistics(ctx, names, times) {
   ctx.fillText('Ура вы победили!', 120, 40);
   ctx.fillText('Список результатов:', 120, 60);
   var maxTime = 0;
-  // Цикл находяший индекс высоты на основыниии данных массива times
+  // Цикл находяший индекс высоты на основынии данных массива times
   for (var i = 0; i < times.length; i++) {
     var currentTime = Math.round(times[i]);
     if (currentTime > maxTime) {
@@ -22,7 +22,7 @@ function renderStatistics(ctx, names, times) {
     }
     var heightIndex = Math.trunc(maxTime / columnMaxHeight * 100) / 100;
   }
-  // Цикл потсроения гистограммы
+  // Цикл построения гистограммы
   for (var j = 0; j < names.length; j++) {
     var currentTime = Math.round(times[j]);
     var currentName = names[j];
