@@ -17,16 +17,12 @@ function renderStatistics(ctx, names, times) {
   // Цикл находяший индекс высоты на основыниии данных массива times
   for (var i = 0; i < times.length; i++) {
     var currentTime = Math.round(times[i]);
-    // var currentName = names[i];
-    // console.log('Имя игрока ' + currentName + ' время игрока ' + currentTime);
     if (currentTime > maxTime) {
       maxTime = currentTime;
-      // console.log('Максимальное время ' + maxTime);
     }
     var heightIndex = Math.trunc(maxTime / columnMaxHeight * 100) / 100;
-    // console.log('Индекс высоты ' + heightIndex);
   }
-  // Цикл потсроения гистогрыммы
+  // Цикл потсроения гистограммы
   for (var j = 0; j < names.length; j++) {
     var currentTime = Math.round(times[j]);
     var currentName = names[j];
