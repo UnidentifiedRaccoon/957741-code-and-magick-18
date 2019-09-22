@@ -1,6 +1,6 @@
 'use strict';
 
-function renderStatistics(ctx, names, times) {
+window.renderStatistics = function (ctx, names, times) {
   var columnWidth = 40;
   var columnWhiteSpace = 50;
   var columnMaxHeight = 150;
@@ -41,4 +41,4 @@ function renderStatistics(ctx, names, times) {
     ctx.fillText(currentTime, 150 + rightOffset, 250 - currentRectHeight - 10);
     ctx.fillText(currentName, 150 + rightOffset, 250 + 20);
   }
-}
+};
