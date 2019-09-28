@@ -16,18 +16,18 @@ var similarWizardTemplate = document.querySelector('#similar-wizard-template').c
 
 // Функция для получения случайного элемента из массива
 // Прим: так как величина длинны массива больше величины индекса последнего элемента массива, Math.random() никогда не выдает один, а Math.floor() округляет вниз
-var getRandomNumber = function (arr) {
+var getRandomArrayElement = function (arr) {
   var max = arr.length;
-  var randomNumber = Math.floor(Math.random() * max);
-  return arr[randomNumber];
+  var randomElement = Math.floor(Math.random() * max);
+  return arr[randomElement];
 };
 
 // Функция возращаюшая обьект мага с рандомными свойствами, заданными на основании данных массивов
 var getWizardObject = function (names, surnames, colors, eyesColors) {
   var wizard = {
-    name: getRandomNumber(names) + ' ' + getRandomNumber(surnames),
-    coatColor: getRandomNumber(colors),
-    eyesColor: getRandomNumber(eyesColors.length),
+    name: getRandomArrayElement(names) + ' ' + getRandomArrayElement(surnames),
+    coatColor: getRandomArrayElement(colors),
+    eyesColor: getRandomArrayElement(eyesColors.length),
   };
   return wizard;
 };
