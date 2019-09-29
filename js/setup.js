@@ -42,14 +42,11 @@ var renderWizard = function (wizard) {
 };
 
 // Наполнение массива wizards обьектами магов
-for (var i = 0; i < WIZARD_AMOUNT; i++) {
-  wizards[i] = getWizardObject(WIZARD_NAMES, WIZARD_SURNAMES, WIZARD_COLORS, WIZARD_EYES_COLORS);
-}
-
 // Наполнение fragment`а DOM - элементами магов
 var fragment = document.createDocumentFragment();
-for (var j = 0; j < wizards.length; j++) {
-  fragment.appendChild(renderWizard(wizards[j]));
+for (var i = 0; i < WIZARD_AMOUNT; i++) {
+  wizards[i] = getWizardObject(WIZARD_NAMES, WIZARD_SURNAMES, WIZARD_COLORS, WIZARD_EYES_COLORS);
+  fragment.appendChild(renderWizard(wizards[i]));
 }
 // Вставка fragment`а на страницу
 similarListElement.appendChild(fragment);
