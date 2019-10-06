@@ -83,9 +83,10 @@ var changeWizardPartColor = function (arr, changedItem, changedInput, propertyTy
       changedItem.style.background = color;
     } else if (propertyType === 'color') {
       changedItem.style.color = color;
-    } else {
-      console.log('В функцию передан неправильный параметр свойства');
     }
+    //  else {
+    //   console.log('В функцию передан неправильный параметр свойства');
+    // }
     changedInput.value = color;
   });
 };
