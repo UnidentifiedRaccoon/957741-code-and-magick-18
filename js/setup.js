@@ -130,5 +130,6 @@ for (var i = 0; i < WIZARD_AMOUNT; i++) {
 }
 // Вставка fragment`а на страницу
 similarListElement.appendChild(fragment);
-// Отображение окна пользователя
-// userSetup.querySelector('.setup-similar').classList.remove('hidden');
+
+// Отображение блока с похожими персонажами
+userSetup.querySelector('.setup-similar').classList.remove('hidden');
