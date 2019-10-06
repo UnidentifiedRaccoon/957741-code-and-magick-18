@@ -1,18 +1,98 @@
 'use strict';
-
 //  Список констант
 var WIZARD_NAMES = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
 var WIZARD_SURNAMES = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
-var WIZARD_COLORS = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
+var WIZARD_COAT_COLORS = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
 var WIZARD_EYES_COLORS = ['black', 'red', 'blue', 'yellow', 'green'];
+var WIZARD_FIREBALL_COLORS = ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'];
 var WIZARD_AMOUNT = 4;
 var wizards = [];
+var ESC_KEYCODE = 27;
+var ENTER_KEYCODE = 13;
 
 // Получение окна пользователя и шаблона мага (а также места для вставки шаблона мага)
-var userWindow = document.querySelector('.setup');
-userWindow.classList.remove('hidden');
-var similarListElement = userWindow.querySelector('.setup-similar-list');
+var userSetup = document.querySelector('.setup');
+var setupOpen = document.querySelector('.setup-open');
+var setupClose = userSetup.querySelector('.setup-close');
+var userSetupFieldName = userSetup.querySelector('.setup-user-name');
+var wizardCoat = userSetup.querySelector('.wizard-coat');
+var wizardCoatField = userSetup.querySelector('[name="coat-color"]');
+var wizardEyes = userSetup.querySelector('.wizard-eyes');
+var wizardEyesField = userSetup.querySelector('[name="eyes-color"]');
+var wizardFireball = userSetup.querySelector('.setup-fireball-wrap');
+var wizardFireballField = userSetup.querySelector('[name="fireball-color"]');
+var similarListElement = userSetup.querySelector('.setup-similar-list');
 var similarWizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
+
+// Функция обработчика закрытия пользовательского окна нажатием на ESC
+var popupEscKeydownHandler = function (evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    closePopup();
+  }
+};
+// Функция не дающая закрыться пользовательскому окну(через ESC) пока фокус находится в поле ввода имени
+userSetupFieldName.onfocus = function () {
+  document.removeEventListener('keydown', popupEscKeydownHandler);
+};
+
+// Функция открытия пользовательского окна
+var openPopup = function () {
+  userSetup.classList.remove('hidden');
+  document.addEventListener('keydown', popupEscKeydownHandler);
+};
+
+// Функция закрытия пользовательского окна
+var closePopup = function () {
+  userSetup.classList.add('hidden');
+  document.removeEventListener('keydown', popupEscKeydownHandler);
+};
+
+// Обработчик открытия пользовательского окна через КЛИК
+setupOpen.addEventListener('click', function () {
+  openPopup();
+});
+
+// Обработчик открытия пользовательского окна через ENTER
+setupOpen.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    openPopup();
+  }
+});
+
+// Обработчик закрытия пользовательского окна через КЛИК
+setupClose.addEventListener('click', function () {
+  closePopup();
+});
+
+// Обработчик закрытия пользовательского окна через ENTER
+setupClose.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    closePopup();
+  }
+});
+
+// Функция позволяющая менять цвет(из заданного массива цветов) объекта при клике на него, и передавать значение цвета в input атрибут value
+var changeWizardPartColor = function (arr, changedItem, changedInput, propertyType) {
+  var colorNumber = 0;
+  changedItem.addEventListener('click', function () {
+    colorNumber++;
+    var color = arr[colorNumber % arr.length];
+    if (propertyType === 'fill') {
+      changedItem.style.fill = color;
+    } else if (propertyType === 'background') {
+      changedItem.style.background = color;
+    } else if (propertyType === 'color') {
+      changedItem.style.color = color;
+    } else {
+      console.log('В функцию передан неправильный параметр свойства');
+    }
+    changedInput.value = color;
+  });
+};
+
+changeWizardPartColor(WIZARD_COAT_COLORS, wizardCoat, wizardCoatField, 'fill');
+changeWizardPartColor(WIZARD_EYES_COLORS, wizardEyes, wizardEyesField, 'fill');
+changeWizardPartColor(WIZARD_FIREBALL_COLORS, wizardFireball, wizardFireballField, 'background');
 
 // Функция для получения случайного элемента из массива
 // Прим: так как величина длинны массива больше величины индекса последнего элемента массива, Math.random() никогда не выдает один, а Math.floor() округляет вниз
@@ -45,11 +125,10 @@ var renderWizard = function (wizard) {
 // Наполнение fragment`а DOM - элементами магов
 var fragment = document.createDocumentFragment();
 for (var i = 0; i < WIZARD_AMOUNT; i++) {
-  wizards[i] = getWizardObject(WIZARD_NAMES, WIZARD_SURNAMES, WIZARD_COLORS, WIZARD_EYES_COLORS);
+  wizards[i] = getWizardObject(WIZARD_NAMES, WIZARD_SURNAMES, WIZARD_COAT_COLORS, WIZARD_EYES_COLORS);
   fragment.appendChild(renderWizard(wizards[i]));
 }
 // Вставка fragment`а на страницу
 similarListElement.appendChild(fragment);
-
 // Отображение окна пользователя
-userWindow.querySelector('.setup-similar').classList.remove('hidden');
+// userSetup.querySelector('.setup-similar').classList.remove('hidden');
