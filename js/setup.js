@@ -30,10 +30,6 @@ var popupEscKeydownHandler = function (evt) {
     closePopup();
   }
 };
-// Функция не дающая закрыться пользовательскому окну(через ESC) пока фокус находится в поле ввода имени
-userSetupFieldName.onfocus = function () {
-  document.removeEventListener('keydown', popupEscKeydownHandler);
-};
 
 // Функция открытия пользовательского окна
 var openPopup = function () {
@@ -71,7 +67,18 @@ setupClose.addEventListener('keydown', function (evt) {
   }
 });
 
+// Функция УДАЛЯЮЩАЯ возможность закрытия пользовательского окна кнопкой ESC, при ФОКУСИРОВКЕ на поле ввода
+userSetupFieldName.addEventListener('focus', function () {
+  document.removeEventListener('keydown', popupEscKeydownHandler);
+});
+
+// Функция ДОБАВЛЯЮЩАЯ возможность закрытия пользовательского окна кнопкой ESC, при РАСФОКУСИРОВКЕ с поля ввода
+userSetupFieldName.addEventListener('blur', function () {
+  document.addEventListener('keydown', popupEscKeydownHandler);
+});
+
 // Функция позволяющая менять цвет(из заданного массива цветов) объекта при клике на него, и передавать значение цвета в input атрибут value
+// Прим: propertyType - это CSS свойство объекта, в которое можно передать цвет
 var changeWizardPartColor = function (arr, changedItem, changedInput, propertyType) {
   var colorNumber = 0;
   changedItem.addEventListener('click', function () {
@@ -84,9 +91,6 @@ var changeWizardPartColor = function (arr, changedItem, changedInput, propertyTy
     } else if (propertyType === 'color') {
       changedItem.style.color = color;
     }
-    //  else {
-    //   console.log('В функцию передан неправильный параметр свойства');
-    // }
     changedInput.value = color;
   });
 };
