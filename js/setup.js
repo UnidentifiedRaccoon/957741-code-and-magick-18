@@ -44,9 +44,7 @@ var closePopup = function () {
 };
 
 // Обработчик открытия пользовательского окна через КЛИК
-setupOpen.addEventListener('click', function () {
-  openPopup();
-});
+setupOpen.addEventListener('click', openPopup);
 
 // Обработчик открытия пользовательского окна через ENTER
 setupOpen.addEventListener('keydown', function (evt) {
@@ -56,9 +54,7 @@ setupOpen.addEventListener('keydown', function (evt) {
 });
 
 // Обработчик закрытия пользовательского окна через КЛИК
-setupClose.addEventListener('click', function () {
-  closePopup();
-});
+setupClose.addEventListener('click', closePopup);
 
 // Обработчик закрытия пользовательского окна через ENTER
 setupClose.addEventListener('keydown', function (evt) {
