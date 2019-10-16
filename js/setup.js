@@ -25,7 +25,7 @@ var similarListElement = userSetup.querySelector('.setup-similar-list');
 var similarWizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
 
 // Функция обработчика закрытия пользовательского окна нажатием на ESC
-var popupEscKeydownHandler = function (evt) {
+var onPopupEscKeydown = function (evt) {
   if (evt.keyCode === ESC_KEYCODE) {
     closePopup();
   }
@@ -34,13 +34,13 @@ var popupEscKeydownHandler = function (evt) {
 // Функция открытия пользовательского окна
 var openPopup = function () {
   userSetup.classList.remove('hidden');
-  document.addEventListener('keydown', popupEscKeydownHandler);
+  document.addEventListener('keydown', onPopupEscKeydown);
 };
 
 // Функция закрытия пользовательского окна
 var closePopup = function () {
   userSetup.classList.add('hidden');
-  document.removeEventListener('keydown', popupEscKeydownHandler);
+  document.removeEventListener('keydown', onPopupEscKeydown);
 };
 
 // Обработчик открытия пользовательского окна через КЛИК
@@ -65,12 +65,12 @@ setupClose.addEventListener('keydown', function (evt) {
 
 // Функция УДАЛЯЮЩАЯ возможность закрытия пользовательского окна кнопкой ESC, при ФОКУСИРОВКЕ на поле ввода
 userSetupFieldName.addEventListener('focus', function () {
-  document.removeEventListener('keydown', popupEscKeydownHandler);
+  document.removeEventListener('keydown', onPopupEscKeydown);
 });
 
 // Функция ДОБАВЛЯЮЩАЯ возможность закрытия пользовательского окна кнопкой ESC, при РАСФОКУСИРОВКЕ с поля ввода
 userSetupFieldName.addEventListener('blur', function () {
-  document.addEventListener('keydown', popupEscKeydownHandler);
+  document.addEventListener('keydown', onPopupEscKeydown);
 });
 
 // Функция позволяющая менять цвет(из заданного массива цветов) объекта при клике на него, и передавать значение цвета в input атрибут value
