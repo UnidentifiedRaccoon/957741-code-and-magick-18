@@ -1,23 +1,10 @@
 'use strict';
 
 (function () {
-  var WIZARD_NAMES = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
-  var WIZARD_SURNAMES = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
   var WIZARD_AMOUNT = 4;
-  var wizards = [];
   var personageSetup = document.querySelector('.setup');
   var similarListElement = personageSetup.querySelector('.setup-similar-list');
   var similarWizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
-
-  // Функция возращаюшая обьект мага с рандомными свойствами, заданными на основании данных из массивов
-  var getWizardObject = function (names, surnames, colors, eyesColors) {
-    var wizard = {
-      name: window.util.getRandomArrayElement(names) + ' ' + window.util.getRandomArrayElement(surnames),
-      coatColor: window.util.getRandomArrayElement(colors),
-      eyesColor: window.util.getRandomArrayElement(eyesColors.length),
-    };
-    return wizard;
-  };
 
   // Создание DOM элемента мага на основании данных обьекта wizard
   var renderWizard = function (wizard) {
@@ -29,33 +16,35 @@
   };
 
   var onLoad = function (dataWizards) {
-    console.log(dataWizards);
-    // Наполнение массива wizards обьектами магов
-    // Наполнение fragment`а DOM - элементами магов
-    var fragment = document.createDocumentFragment();
-    for (var i = 0; i < WIZARD_AMOUNT; i++) {
-      // wizards[i] = getWizardObject(WIZARD_NAMES, WIZARD_SURNAMES, window.util.WIZARD_COAT_COLORS, window.util.WIZARD_EYES_COLORS);
-      fragment.appendChild(renderWizard(dataWizards[i]));
+    // dataWizards - массив объектов магов получаемый с сервера
+    // Массив содержащий числа от 0 до dataWizards.length(наполняется при помоши цикла)
+    var indexes = [];
+    for (var i = 0; i < dataWizards.length; i++) {
+      indexes[i] = i;
     }
-    // Вставка fragment`а на страницу
-    similarListElement.appendChild(fragment);
-  };
 
-  var onError = function (message) {
-    // Создание и отображение сообщения об ошибке
-    var node = document.createElement('div');
-    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
-    node.style.position = 'absolute';
-    node.style.left = 0;
-    node.style.right = 0;
-    node.style.fontSize = '30px';
-
-    node.textContent = message;
-    document.body.insertAdjacentElement('afterbegin', node);
+    var fragment = document.createDocumentFragment(); // Создание фрагмента
+    // Цикл для добавления нескольких случайных неповторяющихся карточек магов в фрагмент
+    for (var j = 0; j < WIZARD_AMOUNT; j++) {
+      // index - случайное число
+      var index = window.util.getRandomNumber(0, indexes.length - 1);
+      // numder - случайный элемент массива indexes
+      var number = indexes[index];
+      // Получение информации о маге под индексом number
+      var currentWizardInfo = dataWizards[number];
+      // Рендерин карточки этого мага
+      var currentWizardCard = renderWizard(currentWizardInfo);
+      // Вставка карточки в фрагмент
+      fragment.appendChild(currentWizardCard);
+      // Удаление number из массива indexes
+      // Как результа массив indexes становится короче и мы больше не можем получить мага с индексом number(т.к. number удален)
+      indexes.splice(index, 1);
+    }
+    similarListElement.appendChild(fragment); // Отображение фрагмента
   };
 
   // Скачивание данных о магах, их рендеринг и вставка на страницу
-  window.backend.load(onLoad, onError);
+  window.backend.load(onLoad, window.util.onError);
 
   // Отображение блока с похожими персонажами
   personageSetup.querySelector('.setup-similar').classList.remove('hidden');

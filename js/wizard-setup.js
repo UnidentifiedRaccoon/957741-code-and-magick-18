@@ -37,17 +37,13 @@
 
   // Обраюотка события отправки формы
   var form = document.querySelector('.setup-wizard-form');
-  var onLoad = function (response) {
-    personageSetup.classList.add('hidden');
-    console.log(response);
-  };
 
-  var onError = function (message) {
-    console.log(message);
+  var onLoad = function () {
+    personageSetup.classList.add('hidden');
   };
 
   form.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.backend.save(new FormData(form), onLoad, onError);
+    window.backend.save(new FormData(form), onLoad, window.util.onError);
   });
 })();
