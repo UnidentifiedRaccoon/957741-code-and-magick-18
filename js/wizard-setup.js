@@ -34,4 +34,16 @@
   changeWizardPartColor(window.util.WIZARD_COAT_COLORS, wizardCoat, wizardCoatField, 'fill');
   changeWizardPartColor(window.util.WIZARD_EYES_COLORS, wizardEyes, wizardEyesField, 'fill');
   changeWizardPartColor(window.util.WIZARD_FIREBALL_COLORS, wizardFireball, wizardFireballField, 'background');
+
+  // Обраюотка события отправки формы
+  var form = document.querySelector('.setup-wizard-form');
+
+  var onLoad = function () {
+    personageSetup.classList.add('hidden');
+  };
+
+  form.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    window.backend.save(new FormData(form), onLoad, window.util.onError);
+  });
 })();
