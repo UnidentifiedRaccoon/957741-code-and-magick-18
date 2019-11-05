@@ -1,6 +1,10 @@
 'use strict';
 
 (function () {
+  var WIZARD_COAT_COLORS = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
+  var WIZARD_EYES_COLORS = ['black', 'red', 'blue', 'yellow', 'green'];
+  var WIZARD_FIREBALL_COLORS = ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'];
+
   var personageSetup = document.querySelector('.setup');
   var wizardCoat = personageSetup.querySelector('.wizard-coat');
   var wizardCoatField = personageSetup.querySelector('[name="coat-color"]');
@@ -9,41 +13,59 @@
   var wizardFireball = personageSetup.querySelector('.setup-fireball-wrap');
   var wizardFireballField = personageSetup.querySelector('[name="fireball-color"]');
   window.wizardSetup = {
-    personageSetupFieldName: personageSetup.querySelector('.setup-user-name')
+    personageSetupFieldName: personageSetup.querySelector('.setup-user-name'),
   };
-  // console.log(window.wizardSetup.personageSetupFieldName);
+  var coatColorNumber = 1;
+  var eyesColorNumber = 1;
+  var fireballColorNumber = 1;
 
-  // Функция позволяющая менять цвет(из заданного массива цветов) объекта при клике на него, и передавать значение цвета в input атрибут value
-  // Прим: propertyType - это CSS свойство объекта, в которое можно передать цвет
-  var changeWizardPartColor = function (arr, changedItem, changedInput, propertyType) {
-    var colorNumber = 0;
-    changedItem.addEventListener('click', function () {
-      colorNumber++;
-      var color = arr[colorNumber % arr.length];
-      if (propertyType === 'fill') {
-        changedItem.style.fill = color;
-      } else if (propertyType === 'background') {
-        changedItem.style.background = color;
-      } else if (propertyType === 'color') {
-        changedItem.style.color = color;
-      }
-      changedInput.value = color;
+  var wizard = {
+    onEyesChange: function () {},
+    onCoatChange: function () {},
+  };
+
+  // Функция которая возвращает номер текущего цвета
+  var getCurrentNum = function (element) {
+    var num;
+    if (element.classList.contains('wizard-coat')) {
+      num = coatColorNumber++;
+    } else if (element.classList.contains('wizard-eyes')) {
+      num = eyesColorNumber++;
+    } else if (element.classList.contains('setup-fireball-wrap')) {
+      num = fireballColorNumber++;
+    }
+    return num;
+  };
+
+  // Функция определяющая какой элемент изменяется и какую функцию следует вызвать для обработки этого изменения
+  var onChange = function (element, newColor) {
+    if (element.classList.contains('wizard-coat')) {
+      wizard.onCoatChange(newColor);
+    } else if (element.classList.contains('wizard-eyes')) {
+      wizard.onEyesChange(newColor);
+    }
+  };
+
+  // Функция добавляющая обработчик для отслеживания кликов по элементу
+  // // Функция позволяющая менять цвет(из заданного массива цветов) объекта при клике на него, и передавать значение цвета в input атрибут value
+  // // Прим: propertyType - это CSS свойство объекта, в которое можно передать цвет
+  var changeWizardElementColor = function (element, arr, changedInput, propertyType) {
+    element.addEventListener('click', function () {
+      // По элементу определяем номер текущего цвета и меняем его на следующий в массиве
+      var num = getCurrentNum(element);
+      var newColor = arr[num % arr.length];
+      // Записываем новый цвет в свойства элемента и в input элемента (для отправки данных на сервер)
+      element.style[propertyType] = newColor;
+      changedInput.value = newColor;
+      // Определяем по элементу какую функцию применять при изменении(т.к. нам нужно каждый раз получать похожих магов, то потребуется сравнивать цвета => мы передаем значение нового цвета)
+      onChange(element, newColor);
     });
   };
 
-  changeWizardPartColor(window.util.WIZARD_COAT_COLORS, wizardCoat, wizardCoatField, 'fill');
-  changeWizardPartColor(window.util.WIZARD_EYES_COLORS, wizardEyes, wizardEyesField, 'fill');
-  changeWizardPartColor(window.util.WIZARD_FIREBALL_COLORS, wizardFireball, wizardFireballField, 'background');
+  // Добавление частям мага обработчиков
+  changeWizardElementColor(wizardCoat, WIZARD_COAT_COLORS, wizardCoatField, 'fill');
+  changeWizardElementColor(wizardEyes, WIZARD_EYES_COLORS, wizardEyesField, 'fill');
+  changeWizardElementColor(wizardFireball, WIZARD_FIREBALL_COLORS, wizardFireballField, 'background');
 
-  // Обраюотка события отправки формы
-  var form = document.querySelector('.setup-wizard-form');
-
-  var onLoad = function () {
-    personageSetup.classList.add('hidden');
-  };
-
-  form.addEventListener('submit', function (evt) {
-    evt.preventDefault();
-    window.backend.save(new FormData(form), onLoad, window.util.onError);
-  });
+  window.wizardSetup.wizard = wizard;
 })();
